@@ -66,6 +66,7 @@ namespace EdgeDetect_IP
             pix_in = dat_in.read(); // Read streaming interface
             dat_out.write(pix_in);
           }
+          
           for(uint2 i=0;;i++){
             pix0 = pix_in.slc<8>(i*8);
             pix2 = pix_buf1;

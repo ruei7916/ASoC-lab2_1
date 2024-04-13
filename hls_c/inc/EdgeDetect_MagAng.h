@@ -76,7 +76,7 @@ namespace EdgeDetect_IP
           dy4[1] = dy.grad1;
           dy4[2] = dy.grad2;
           dy4[3] = dy.grad3;
-
+          #pragma hls_unroll yes
           for(uint2 i=0;;i++){
             ac_math::ac_abs(dx4[i], dx_abs);
             ac_math::ac_abs(dy4[i], dy_abs);
