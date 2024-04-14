@@ -45,8 +45,8 @@ namespace EdgeDetect_IP
     void CCS_BLOCK(run)(ac_channel<gradType4x>    &dx_in,
                         ac_channel<gradType4x>    &dy_in,
                         ac_channel<pixelType4x>   &dat_in,
-                        maxWType                  &widthIn,
-                        maxHType                  &heightIn,
+                        maxWType                  widthIn,
+                        maxHType                  heightIn,
                         bool                      sw_in,
                         uint32                    &crc32_pix_in,
                         uint32                    &crc32_dat_out,
@@ -55,7 +55,7 @@ namespace EdgeDetect_IP
       gradType4x dx, dy;
       gradType dx4[4];
       gradType dy4[4];
-      uint9 dx_abs, dy_abs;
+      pixelType dx_abs, dy_abs;
       pixelType magn[4];
       pixelType4x pix_in;
       Stream_t out;
@@ -80,11 +80,8 @@ namespace EdgeDetect_IP
           for(uint2 i=0;;i++){
             ac_math::ac_abs(dx4[i], dx_abs);
             ac_math::ac_abs(dy4[i], dy_abs);
-            if((dx_abs + dy_abs)>255)
-              magn[i] = 255;
-            else
-              magn[i] = dx_abs + dy_abs;
-
+            ac_fixed<8,8,false,AC_TRN,AC_SAT> abs_sum_clip = dx_abs + dy_abs;
+            magn[i] = (pixelType) abs_sum_clip.to_uint();
             if(i==3)break;
           }
           if(sw_in==0){
@@ -105,7 +102,7 @@ namespace EdgeDetect_IP
           
 
           // programmable width exit condition
-          if (x == maxWType(widthIn/4-1)) { // cast to maxWType for RTL code coverage
+          if (x == (maxWType)widthIn/4-1) { // cast to maxWType for RTL code coverage
             break;
           }
         }
